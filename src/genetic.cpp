@@ -1,6 +1,7 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <numeric>
 #include <random>
 #include <utility>
 #include "genetic.h"
@@ -134,9 +135,9 @@ void Genetic::Mutate()
 
 void Genetic::Select()
 {
-    double fitness_sum = 0.0;
-    for (const auto &individual : population_)
-        fitness_sum += individual.fitness;
+    double fitness_sum = std::accumulate(population_.begin(), population_.end(),
+                                         0.0);
+
     std::uniform_real_distribution<double> distribution(0.0, fitness_sum);
 
     Population new_population;
