@@ -137,7 +137,6 @@ void Genetic::Select()
     double fitness_sum = 0.0;
     for (const auto &individual : population_)
         fitness_sum += individual.fitness;
-
     std::uniform_real_distribution<double> distribution(0.0, fitness_sum);
 
     Population new_population;
@@ -166,7 +165,7 @@ void Genetic::Select()
 
 bool Genetic::ShouldTerminate()
 {
-    return generation_ > 2000;
+    return generation_ > 10000;
 }
 
 void Genetic::UpdateBestIndividual()
