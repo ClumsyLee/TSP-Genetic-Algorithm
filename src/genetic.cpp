@@ -115,6 +115,8 @@ void Genetic::GenerateRandomPopulation()
                      generator_);
         Evaluate(population_.back());
     }
+// population_.back().path = {0, 10, 13, 3, 7, 9, 14, 18, 6, 17, 15, 4, 12, 19, 5, 16, 8, 1, 11, 2};
+// Evaluate(population_.back());
 }
 
 void Genetic::Mutate()
