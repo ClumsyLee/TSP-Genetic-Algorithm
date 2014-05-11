@@ -42,14 +42,38 @@ void Individual::Crossover(Individual &mate, std::mt19937 &generator)
 
 void Individual::Mutate(std::mt19937 &generator)
 {
-    std::uniform_int_distribution<int> distribution(1, path.size() - 1);
+    // std::uniform_int_distribution<int> distribution(1, path.size() - 1);
 
-    int position_1 = distribution(generator);
-    int position_2;
-    while ((position_2 = distribution(generator)) == position_1)
-        continue;
+    // int position_1 = distribution(generator);
+    // int position_2;
+    // while ((position_2 = distribution(generator)) == position_1)
+    //     continue;
 
-    std::swap(path[position_1], path[position_2]);
+    // std::swap(path[position_1], path[position_2]);
+
+
+    int size = path.size();
+    // ((size - 1) * (size - 2) / 2) represents the total number of intervals
+    // where only the first city will never be changed.
+    // For example, when size = 3:
+    //
+    //  * * *
+    //  * *
+    //  *
+    //
+    //  There are 6 intervals in total
+    int random_index = generator() % ((size - 1) * (size - 2) / 2);
+    int i;
+    for (i = 1; i < size - 1; i++)
+    {
+        int j = size - 1 - i;
+        if (random_index >= j)
+            random_index -= j;
+        else
+            break;
+    }
+
+    std::reverse(path.begin() + i, path.begin() + i + 2 + random_index);
 }
 
 }  // namespace TSP_genetic_algorithm
