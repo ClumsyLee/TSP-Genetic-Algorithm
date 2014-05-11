@@ -43,7 +43,7 @@ Genetic::Path Genetic::FindPath(int population_size, double crossover_rate,
 {
     // initialize parameters
     population_size_ = population_size > 0 ? population_size : 1;
-    crossover_rate_ = (crossover_rate >= 0.0 && crossover_rate_ <= 1.0) ?
+    crossover_rate_ = (crossover_rate >= 0.0 && crossover_rate <= 1.0) ?
                        crossover_rate :
                        1.0;
     mutation_rate_ = (mutation_rate >= 0.0 && mutation_rate <= 1.0) ?
