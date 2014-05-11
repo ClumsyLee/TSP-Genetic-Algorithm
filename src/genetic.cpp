@@ -95,7 +95,7 @@ void Genetic::Evaluate(Individual &individual)
         last_city = new_city;
     }
     individual.cost = cost;
-    individual.fitness = 1.0 / (cost - 24.2);
+    individual.fitness = 1.0 / cost;
 }
 
 void Genetic::GenerateRandomPopulation()
