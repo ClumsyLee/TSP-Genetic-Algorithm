@@ -54,6 +54,7 @@ class Genetic
     // status variables
     Population population_;  // do NOT sort
     Individual best_individual_;
+    int stable_truns_;
     int generation_;
 };
 

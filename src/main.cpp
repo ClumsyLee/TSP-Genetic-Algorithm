@@ -24,7 +24,8 @@ int main(int argc, char *argv[])
     }
 
     Genetic solver(cities);
-    Genetic::Path path = solver.FindPath(10000, 1.0, 0.01);
+    // the parameters below is good enough
+    Genetic::Path path = solver.FindPath(10000, 0.5, 0.01);
 
 
     for (int city_index : path.first)

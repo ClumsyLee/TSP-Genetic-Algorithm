@@ -18,6 +18,7 @@ Genetic::Genetic(const CityInfo &city_info)
       mutation_rate_(0.0),
       population_(),
       best_individual_(),
+      stable_truns_(0),
       generation_(0)
 {
     int city_number = city_info_.size();
@@ -64,6 +65,7 @@ Genetic::Path Genetic::FindPath(int population_size, double crossover_rate,
         Mutate();
         UpdateBestIndividual();
         generation_++;
+        stable_truns_++;
     }
 
     Path best_path(best_individual_.path, best_individual_.cost);
@@ -173,7 +175,7 @@ void Genetic::Select()
 
 bool Genetic::ShouldTerminate()
 {
-    return generation_ > 2000;
+    return stable_truns_ > 500;
 }
 
 void Genetic::UpdateBestIndividual()
@@ -192,6 +194,7 @@ void Genetic::UpdateBestIndividual()
 
     if (index_of_best_individual >= 0)  // found better
     {
+        stable_truns_ = 0;  // reset stable_turns
         best_individual_ = population_[index_of_best_individual];
     }
 }
