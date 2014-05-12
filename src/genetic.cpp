@@ -1,7 +1,6 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
-#include <numeric>
 #include <random>
 #include <utility>
 #include "genetic.h"
@@ -135,29 +134,37 @@ void Genetic::Mutate()
 
 void Genetic::Select()
 {
-    double fitness_sum = std::accumulate(population_.begin(), population_.end(),
-                                         0.0);
-
-    std::uniform_real_distribution<double> distribution(0.0, fitness_sum);
+    double fitness_sum = 0.0;
+    for (const auto &individual : population_)
+        fitness_sum += individual.fitness;
 
     Population new_population;
     new_population.reserve(population_size_);
 
+    // choose new population according to a individual's ratio
+    typedef std::pair<int, double> FitnessInfo;
+    std::vector<FitnessInfo> fractions;
     for (int i = 0; i < population_size_; i++)
     {
-        double sum_until_now = 0.0;
-        // randomly point to a position
-        double arrow = distribution(generator_);
+        double ratio = population_[i].fitness / fitness_sum * population_size_;
+        int number_chosen = static_cast<int>(ratio);
 
-        for (const auto &individual : population_)
-        {
-            sum_until_now += individual.fitness;
-            if (sum_until_now >= arrow)  // select this one
-            {
-                new_population.push_back(individual);
-                break;
-            }
-        }
+        new_population.insert(new_population.end(), number_chosen,
+                              population_[i]);
+        fractions.push_back(FitnessInfo(i, ratio - number_chosen));
+    }
+
+    // move the best elements to the front
+    int more_need = population_size_ - new_population.size();
+    std::nth_element(fractions.begin(), fractions.begin() + more_need - 1,
+                     fractions.end(),
+                     [] (const FitnessInfo &lhs, const FitnessInfo &rhs)
+                     { return lhs.second > rhs.second; });
+
+    // fill new_population
+    for (int i = 0; i < more_need; i++)
+    {
+        new_population.push_back(population_[fractions[i].first]);
     }
 
     // new population created
@@ -166,7 +173,7 @@ void Genetic::Select()
 
 bool Genetic::ShouldTerminate()
 {
-    return generation_ > 10000;
+    return generation_ > 2000;
 }
 
 void Genetic::UpdateBestIndividual()
